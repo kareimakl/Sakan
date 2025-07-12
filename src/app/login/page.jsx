@@ -2,6 +2,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { jwtDecode } from "jwt-decode";
 
 function Login() {
   const router = useRouter(); // Initialize the router
@@ -42,6 +43,7 @@ function Login() {
 
     try {
       setLoading(true);
+
       const response = await fetch(
         "https://sakan.runasp.net/api/Account/Login",
         {
@@ -49,22 +51,33 @@ function Login() {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            email,
-            password,
-          }),
+          body: JSON.stringify({ email, password }),
         }
       );
 
       const data = await response.json();
+      console.log("Response Data:", data); // 👈 طباعة بيانات الاستجابة
 
       if (response.ok) {
-        console.log("Login successful", data);
-        router.push("/");
+        const token = data.token;
+        const decoded = jwtDecode(token);
+
+        console.log("Decoded Token:", decoded); // 👈 طباعة محتوى التوكن
+
+        const userId =
+          decoded[
+            "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
+          ];
+
+        localStorage.setItem("token", token);
+        localStorage.setItem("userId", userId);
+        localStorage.setItem("user", token);
+        router.push("/AccountPage");
       } else {
         setLoginError(data.message || "Login failed");
       }
     } catch (error) {
+      console.error("Login Error:", error); // 👈 طباعة الخطأ هنا
       setLoginError("An error occurred. Please try again.");
     } finally {
       setLoading(false);
@@ -88,7 +101,12 @@ function Login() {
     <section className="flex flex-row justify-between items-center m-auto text-center h-screen w-full">
       {/* Left Column */}
       <div className="bg-background flex justify-center items-center m-auto text-center w-1/2 h-screen">
-        <Image src="/assets/icons/logoCol.svg" alt="Company Logo" width={150} height={150} />
+        <Image
+          src="/assets/icons/logoCol.svg"
+          alt="Company Logo"
+          width={150}
+          height={150}
+        />
       </div>
 
       {/* Right Column */}

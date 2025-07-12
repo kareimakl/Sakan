@@ -1,10 +1,16 @@
 "use client";
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import "../styles/header.css";
 
 const Header = () => {
   const [showModal, setShowModal] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const user = localStorage.getItem("user");
+    setIsLoggedIn(!!user); // true if user data exists
+  }, []);
 
   const toggleModal = () => setShowModal((prev) => !prev);
 
@@ -39,8 +45,24 @@ const Header = () => {
         </div>
 
         <div className="flex gap-2">
-          <Link href="/login" className="text-[#fff] min-w-[50px]">Log In</Link>
-          <Link href="/contact">
+          {!isLoggedIn && (
+            <Link href="/login" className="text-[#fff]">
+              Login
+            </Link>
+          )}
+
+          {isLoggedIn && (
+            <button
+              className="text-red-500"
+              onClick={() => {
+                localStorage.removeItem("user");
+                window.location.reload(); // To update the UI
+              }}
+            >
+              Logout
+            </button>
+          )}
+          <Link href="/AccountPage">
             <button className="contact-but">List Your Property</button>
           </Link>
           <button className="menu" onClick={toggleModal}>
@@ -78,8 +100,6 @@ const Header = () => {
           </div>
         )}
       </div>
-
-      
     </header>
   );
 };

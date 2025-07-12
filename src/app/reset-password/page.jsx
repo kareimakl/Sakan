@@ -22,6 +22,8 @@ function ResetPassword() {
       // setError("Verification code or email is missing. Please try again.");
     }
   }, [storedEmail, storedCode]);
+  console.log("Stored Email:", storedEmail);
+  console.log("Stored Code:", storedCode);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -46,7 +48,7 @@ function ResetPassword() {
 
     try {
       const response = await fetch(
-        "https://sakan.runasp.net/api/Account/ResetPassword",
+        "https://sakan.runasp.net/api/account/resetpassword",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -67,14 +69,14 @@ function ResetPassword() {
       } else {
         data = await response.text(); // Parse as plain text
       }
-
+      console.log("API response data:", data);
+      // console.log("Response status:", response.status);
       if (!response.ok) {
         throw new Error(data.message || "Failed to reset password.");
       }
 
       localStorage.removeItem("code-verify");
       localStorage.removeItem("email");
-
       setSuccessMessage("Password reset successful! Redirecting to login...");
       setTimeout(() => router.push("/login"), 2000);
     } catch (err) {
@@ -87,7 +89,12 @@ function ResetPassword() {
   return (
     <section className="flex flex-row justify-between items-center m-auto text-center h-screen w-full">
       <div className="bg-background flex justify-center items-center m-auto text-center w-1/2 h-screen">
-        <Image src="/assets/icons/logoCol.svg" alt="logo" width={150} height={150} />
+        <Image
+          src="/assets/icons/logoCol.svg"
+          alt="logo"
+          width={150}
+          height={150}
+        />
       </div>
       <div className="flex justify-center text-start items-center h-screen w-1/2 m-auto flex-col">
         <div className="items-center w-[90%] text-start">
