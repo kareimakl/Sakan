@@ -43,7 +43,7 @@ function Login() {
     try {
       setLoading(true);
       const response = await fetch(
-        "http://sakan.runasp.net/api/Account/Login",
+        "https://sakan.runasp.net/api/Account/Login",
         {
           method: "POST",
           headers: {

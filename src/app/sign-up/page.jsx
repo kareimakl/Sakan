@@ -54,7 +54,7 @@ function SignUP() {
 
     try {
       const response = await fetch(
-        "http://sakan.runasp.net/api/Account/Register",
+        "https://sakan.runasp.net/api/Account/Register",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

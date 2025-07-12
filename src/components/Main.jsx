@@ -14,7 +14,7 @@ export default function Properties() {
   useEffect(() => {
     async function fetchProperties() {
       try {
-        const res = await fetch("http://sakan.runasp.net/api/Apartment");
+        const res = await fetch("https://sakan.runasp.net/api/Apartment");
         const data = await res.json();
         setProperties(data);
       } catch (error) {

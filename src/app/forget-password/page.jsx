@@ -28,7 +28,7 @@ function ForgotPassword() {
   
     try {
       const response = await fetch(
-        "http://sakan.runasp.net/api/Account/ForgotPassword",
+        "https://sakan.runasp.net/api/Account/ForgotPassword",
         {
           method: "POST",
           headers: {

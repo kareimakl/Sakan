@@ -46,7 +46,7 @@ function ResetPassword() {
 
     try {
       const response = await fetch(
-        "http://sakan.runasp.net/api/Account/ResetPassword",
+        "https://sakan.runasp.net/api/Account/ResetPassword",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
