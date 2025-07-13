@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import Head from "next/head";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import Form from "./_components/form";
 import { jwtDecode } from "jwt-decode";
 
 export default function AccountPage() {
@@ -14,8 +15,15 @@ export default function AccountPage() {
     const fetchUser = async () => {
       try {
         const token = localStorage.getItem("token");
-        const decoded = jwtDecode(token);
 
+        // ✅ تحقق من وجود التوكن
+        if (!token) {
+          console.warn("Token is missing from localStorage");
+          setNotFound(true); // أو setError("لم يتم العثور على مستخدم")
+          return;
+        }
+
+        const decoded = jwtDecode(token); // استخدم jwtDecode وليس jwt_decode
         const email =
           decoded[
             "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"
@@ -24,7 +32,9 @@ export default function AccountPage() {
         const res = await fetch("https://sakan.runasp.net/api/Students");
         const students = await res.json();
 
-        const matchedStudent = students.find((s) => s.email === email);
+        const matchedStudent = students.find(
+          (s) => s.email === "elsayedahmed.official1@gmail.com"
+        );
 
         if (!matchedStudent) {
           setNotFound(true);
@@ -34,6 +44,7 @@ export default function AccountPage() {
         setUser(matchedStudent);
       } catch (err) {
         console.log("حدث خطأ أثناء جلب البيانات", err);
+        setError("حدث خطأ أثناء جلب البيانات");
       }
     };
 
@@ -194,12 +205,7 @@ export default function AccountPage() {
                   </div>
                 ) : (
                   <div className="space-y-6">
-                    <h3 className="text-lg font-medium text-gray-900 mb-4">
-                      Documents
-                    </h3>
-                    <p className="text-sm text-gray-500">
-                      No documents uploaded yet.
-                    </p>
+                    <Form />
                   </div>
                 )}
               </div>
