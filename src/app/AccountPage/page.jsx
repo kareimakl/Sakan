@@ -32,9 +32,7 @@ export default function AccountPage() {
         const res = await fetch("https://sakan.runasp.net/api/Students");
         const students = await res.json();
 
-        const matchedStudent = students.find(
-          (s) => s.email === "elsayedahmed.official1@gmail.com"
-        );
+        const matchedStudent = students.find((s) => s.email === email);
 
         if (!matchedStudent) {
           setNotFound(true);
